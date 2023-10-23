@@ -19,6 +19,13 @@ async def load_data() -> List[Series]:
     data = json.loads(json_data)
     return list(Series(**item) for item in data)
 
+async def get_series(key: str) -> Series:
+    data = await load_data()
+    for x in data:
+        if x.name == key:
+            return x
+    raise KeyError(f"{key} is not found in data")
+
 async def save_data(data: List[Series]):
     raw_data = list(item.model_dump() for item in data)
     json_string = json.dumps(raw_data)

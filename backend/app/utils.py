@@ -99,3 +99,50 @@ def batch(items: List[T], size: int = 3) -> Generator[List[T], Never, None]:
     if len(next_batch):
         yield next_batch
 
+FORMATS = {
+    "webm": {
+        "f": "webm",
+        "deadline": "realtime",
+        "row-mt": 1,
+        "c:v": "vp8",
+        "crf": 20,
+        "b:v": "3M",
+        "cpu-used": 1,
+        "c:a": "libvorbis",
+    },
+    "gif": {"r": 10, "f": "gif", "loop": 0, "final_delay": 50},
+}
+
+
+def add_subtitle_filter(stream, subtitle_filename: str):
+    return stream.filter(
+        "subtitles", filename=subtitle_filename, force_style="Fontsize=24"
+    )
+
+
+def filter_gif_caption(stream, subtitle_filename: str, **output_params):
+    pallette_stream = stream.filter("palettegen")
+    return ffmpeg.filter(
+        [
+            add_subtitle_filter(
+                stream.filter("scale", -1, 320), subtitle_filename
+            ),
+            pallette_stream,
+        ],
+        "paletteuse",
+    ).output("pipe:", **output_params, **FORMATS["gif"])
+
+
+def filter_webm_caption(
+    stream, subtitle_filename: str, audio_index: str, **output_params
+):
+    print(audio_index)
+    return ffmpeg.output(
+        add_subtitle_filter(
+            stream.video.filter("scale", -1, 480), subtitle_filename
+        ),
+        stream[audio_index],
+        "pipe:",
+        **output_params,
+        **FORMATS["webm"],
+    )
