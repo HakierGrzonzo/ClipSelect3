@@ -1,6 +1,6 @@
 import asyncio
 from os import path
-from app.models import Media, Season, Series
+from app.models import Media, MediaMetaInformation, Season, Series
 from app.utils import get_title_from_nfo
 from app.walkers import get_media_files, get_season_folders
 
@@ -35,4 +35,4 @@ async def load_season_from_path(season_path: str) -> Season:
 
 async def load_episode_from_path(media_file_path: str, nfo_path: str) -> Media:
     title, ordinal = await get_title_from_nfo(nfo_path, "episode")
-    return Media(file_path=media_file_path, ordinal=ordinal, name=title, captions=[])
+    return Media(file_path=media_file_path, ordinal=ordinal, name=title, captions=[], meta=MediaMetaInformation())

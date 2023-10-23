@@ -1,6 +1,10 @@
 from typing import List
 from pydantic import BaseModel
 
+class MediaMetaInformation(BaseModel):
+    audio_track_index: int = -1
+    subtitle_track_index: int = -1
+
 class Caption(BaseModel):
     text: str
     start: float
@@ -11,6 +15,7 @@ class Media(BaseModel):
     captions: List[Caption]
     name: str
     ordinal: int
+    meta: MediaMetaInformation
 
 class Season(BaseModel):
     name: str
