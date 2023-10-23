@@ -2,7 +2,7 @@ import aiofiles
 from asyncio import create_subprocess_exec, subprocess
 from os import path
 from bs4 import BeautifulSoup as Soup
-from typing import AsyncGenerator, Literal, Tuple
+from typing import AsyncGenerator, Generator, Literal, Never, Tuple, TypeVar, List
 import ffmpeg
 
 MEDIA_FILE_EXTENSIONS = ['mkv']
@@ -86,4 +86,16 @@ async def run_ffmpeg_generator(ffmpeg_stream) -> AsyncGenerator[bytes, None]:
             break
         yield data
     await proc.wait()
+
+T = TypeVar("T")
+
+def batch(items: List[T], size: int = 3) -> Generator[List[T], Never, None]:
+    next_batch = []
+    for x in items:
+        next_batch.append(x)
+        if len(next_batch) >= size:
+            yield next_batch
+            next_batch = []
+    if len(next_batch):
+        yield next_batch
 

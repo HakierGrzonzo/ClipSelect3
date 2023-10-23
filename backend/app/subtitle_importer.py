@@ -3,9 +3,10 @@ from logging import getLogger
 from typing import Dict
 
 import ffmpeg
+from .chromadb import enroll_episode
 
-from app.models import Media, MediaMetaInformation, Series
-from .utils import run_ffmpeg_async
+from app.models import Media, MediaMetaInformation, Season, Series
+from .utils import run_ffmpeg_async, batch
 from .subtitle_parser import parse_srt_string
 
 logger = getLogger(__name__)
@@ -32,7 +33,7 @@ def rate_audio(stream: Dict) -> int:
         [c(stream) for c in criteria]
     )
 
-async def extract_captions_from_media(media: Media) -> Media:
+async def extract_captions_from_media(media: Media, series: Series, season: Season) -> Media:
     logger.info(f"Starting import of {media.name}")
     probed = ffmpeg.probe(media.file_path)
     subtitles = list(
@@ -63,13 +64,15 @@ async def extract_captions_from_media(media: Media) -> Media:
 
     media.meta = caption_meta
     media.captions = list(parse_srt_string(raw_subs.decode()))
+    enroll_episode(media, series.name, season.ordinal)
     logger.info(f"Finished import of {media.name}, imported {len(media.captions)} captions")
     return media
 
 async def process_caption_for_series(series: Series) -> Series:
     logger.info(f"Started import of {series.name}")
     for season in series.seasons:
-        await gather(*[extract_captions_from_media(media) for media in season.episodes])
+        for items in batch(season.episodes, 4):
+            await gather(*[extract_captions_from_media(media, series, season) for media in items])
 
     logger.info(f"Finished import of {series.name}")
     return series

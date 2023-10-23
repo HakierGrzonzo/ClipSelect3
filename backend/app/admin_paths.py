@@ -1,5 +1,6 @@
 from fastapi import APIRouter, BackgroundTasks
 
+
 from .subtitle_importer import process_caption_for_series
 
 from .models import Series
@@ -11,6 +12,7 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 async def import_task(series: Series):
     series = await process_caption_for_series(series)
+
     await append_data(series)
 
 @router.post("/register", response_model=Series)
