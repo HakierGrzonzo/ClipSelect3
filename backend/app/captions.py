@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Response
 from tempfile import NamedTemporaryFile
 from fastapi.responses import StreamingResponse
 import ffmpeg
@@ -125,3 +125,22 @@ async def get_multi_caption(
     return StreamingResponse(
         content_generator(), headers={"Content-Type": "video/webm"}
     )
+
+@router.get(
+    "/{series_name}/{season_ordinal}/{episode_ordinal}/thumb"
+        )
+async def get_thumbnail_for_episode(
+    series_name: str,
+    season_ordinal: int,
+    episode_ordinal: int
+):
+    series = await get_series(series_name)
+    episode = series.seasons[season_ordinal - 1].episodes[episode_ordinal - 1]
+    a_random_caption = episode.captions[len(episode.captions) // 6]
+    a_random_time = (a_random_caption.start + a_random_caption.stop) / 2
+    thumb, _ = await run_ffmpeg_async(
+        ffmpeg.input(episode.file_path, ss=f"{a_random_time}")
+        .filter("scale", 240, -1)
+        .output("pipe:", vframes=1, f="image2", **{"c:v": "mjpeg"})
+    )
+    return Response(content=thumb, media_type="image/jpeg")

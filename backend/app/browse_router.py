@@ -1,5 +1,6 @@
 from typing import Iterable, List
 from fastapi import APIRouter
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
 from app.json_database import get_series, load_data
@@ -16,6 +17,11 @@ class SeriesResponse(BaseModel):
 async def list_series() -> Iterable[SeriesResponse]:
     data = await load_data()
     return data
+
+@router.get("/series/{series_name}/cover")
+async def get_series_cover(series_name: str):
+    data = await get_series(series_name)
+    return FileResponse(data.cover_path)
 
 
 class SparseEpisode(BaseModel):
