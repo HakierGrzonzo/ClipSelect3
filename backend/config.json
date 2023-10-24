@@ -3,8 +3,13 @@
     "disable_existing_loggers": false,
     "formatters": {
         "default": {
-            "()": "logging.Formatter",
-            "fmt": "%(levelname)s %(name)s@%(lineno)d %(message)s"
+            "()": "uvicorn.logging.ColourizedFormatter",
+            "fmt": "%(levelprefix)s %(name)s@%(lineno)d %(message)s",
+            "use_colors": true
+        },
+        "access": {
+            "()": "uvicorn.logging.AccessFormatter",
+            "fmt": "%(levelprefix)s %(client_addr)s - %(request_line)s %(status_code)s"
         }
     },
     "handlers": {

@@ -12,10 +12,13 @@ from .utils import (
     run_ffmpeg_async,
     run_ffmpeg_generator,
 )
+
 router = APIRouter(prefix="/api/clips", tags=["clips"])
 
 
-@router.get("/{series_name}/{season}/{episode_ordinal}/{caption_ordinal}/simple")
+@router.get(
+    "/{series_name}/{season}/{episode_ordinal}/{caption_ordinal}/simple"
+)
 async def get_simple_caption(
     series_name: str,
     season: int,
@@ -24,7 +27,7 @@ async def get_simple_caption(
     format: str = "webm",
 ):
     series = await get_series(series_name)
-    episode = series.seasons[season-1].episodes[episode_ordinal-1]
+    episode = series.seasons[season - 1].episodes[episode_ordinal - 1]
     caption = episode.captions[caption_ordinal]
     print(episode.name)
     timing = {"ss": f"{caption.start}", "t": f"{caption.stop - caption.start}"}
@@ -67,9 +70,14 @@ async def get_simple_caption(
         "webm": "video/webm",
         "gif": "image/gif",
     }
-    return StreamingResponse(content_generator(), headers={"Content-Type": mime[format]})
+    return StreamingResponse(
+        content_generator(), headers={"Content-Type": mime[format]}
+    )
 
-@router.get("/{series_name}/{season}/{episode_ordinal}/{caption_ordinal_start}/{caption_ordinal_end}/multi")
+
+@router.get(
+    "/{series_name}/{season}/{episode_ordinal}/{caption_ordinal_start}/{caption_ordinal_end}/multi"
+)
 async def get_multi_caption(
     series_name: str,
     season: int,
@@ -80,7 +88,7 @@ async def get_multi_caption(
     if caption_ordinal_end <= caption_ordinal_start:
         raise HTTPException(status_code=422, detail="end <= start")
     series = await get_series(series_name)
-    episode = series.seasons[season-1].episodes[episode_ordinal-1]
+    episode = series.seasons[season - 1].episodes[episode_ordinal - 1]
     first_caption = episode.captions[caption_ordinal_start]
     final_caption = episode.captions[caption_ordinal_end]
     timing = {
@@ -114,5 +122,6 @@ async def get_multi_caption(
             yield data
         temp.close()
 
-    return StreamingResponse(content_generator(), headers={"Content-Type": 'video/webm'})
-
+    return StreamingResponse(
+        content_generator(), headers={"Content-Type": "video/webm"}
+    )

@@ -11,6 +11,7 @@ from .subtitle_parser import parse_srt_string
 
 logger = getLogger(__name__)
 
+
 def rate_stream(stream: Dict) -> int:
     criteria = [
         lambda d: -1 if d["disposition"]["hearing_impaired"] else 0,
@@ -29,11 +30,12 @@ def rate_audio(stream: Dict) -> int:
         lambda d: 1 if d["tags"].get("language", "").lower() == "eng" else 0,
         lambda d: -1 if d["tags"].get("language") is None else 0,
     ]
-    return sum(
-        [c(stream) for c in criteria]
-    )
+    return sum([c(stream) for c in criteria])
 
-async def extract_captions_from_media(media: Media, series: Series, season: Season) -> Media:
+
+async def extract_captions_from_media(
+    media: Media, series: Series, season: Season
+) -> Media:
     logger.info(f"Starting import of {media.name}")
     probed = ffmpeg.probe(media.file_path)
     subtitles = list(
@@ -54,26 +56,36 @@ async def extract_captions_from_media(media: Media, series: Series, season: Seas
         raise Exception(f"No subtitles found! {media}")
     best_subs = sorted(subtitles, key=lambda v: -rate_stream(v))[0]
     best_audio = sorted(audio, key=lambda v: -rate_audio(v))[0]
-    caption_meta = MediaMetaInformation(audio_track_index=best_audio["index"], subtitle_track_index=best_subs["index"])
+    caption_meta = MediaMetaInformation(
+        audio_track_index=best_audio["index"],
+        subtitle_track_index=best_subs["index"],
+    )
 
     raw_subs, _ = await run_ffmpeg_async(
-        ffmpeg.input(media.file_path)[f'{caption_meta.subtitle_track_index}'].output(
-            "pipe:", f="srt"
-        )
+        ffmpeg.input(media.file_path)[
+            f"{caption_meta.subtitle_track_index}"
+        ].output("pipe:", f="srt")
     )
 
     media.meta = caption_meta
     media.captions = list(parse_srt_string(raw_subs.decode()))
     enroll_episode(media, series.name, season.ordinal)
-    logger.info(f"Finished import of {media.name}, imported {len(media.captions)} captions")
+    logger.info(
+        f"Finished import of {media.name}, imported {len(media.captions)} captions"
+    )
     return media
+
 
 async def process_caption_for_series(series: Series) -> Series:
     logger.info(f"Started import of {series.name}")
     for season in series.seasons:
         for items in batch(season.episodes, 4):
-            await gather(*[extract_captions_from_media(media, series, season) for media in items])
+            await gather(
+                *[
+                    extract_captions_from_media(media, series, season)
+                    for media in items
+                ]
+            )
 
     logger.info(f"Finished import of {series.name}")
     return series
-        

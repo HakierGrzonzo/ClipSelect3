@@ -2,12 +2,23 @@ import aiofiles
 from asyncio import create_subprocess_exec, subprocess
 from os import path
 from bs4 import BeautifulSoup as Soup
-from typing import AsyncGenerator, Generator, Literal, Never, Tuple, TypeVar, List
+from typing import (
+    AsyncGenerator,
+    Generator,
+    Literal,
+    Never,
+    Tuple,
+    TypeVar,
+    List,
+)
 import ffmpeg
 
-MEDIA_FILE_EXTENSIONS = ['mkv']
+MEDIA_FILE_EXTENSIONS = ["mkv"]
 
-async def get_title_from_nfo(base_path: str, scope: Literal["season", "tvshow", "episode"]) -> Tuple[str, int | None]:
+
+async def get_title_from_nfo(
+    base_path: str, scope: Literal["season", "tvshow", "episode"]
+) -> Tuple[str, int | None]:
     if scope == "episode":
         nfo_path = base_path
     else:
@@ -15,15 +26,15 @@ async def get_title_from_nfo(base_path: str, scope: Literal["season", "tvshow", 
     async with aiofiles.open(nfo_path, "r") as nfo:
         nfo_raw_data = await nfo.read()
 
-    nfo = Soup(nfo_raw_data, features='lxml')
+    nfo = Soup(nfo_raw_data, features="lxml")
 
     try:
         name = nfo.find("title").text
 
-        if scope == 'season':
-            ordinal = int(nfo.find('seasonnumber').text)
-        elif scope == 'episode':
-            ordinal = int(nfo.find('episode').text)
+        if scope == "season":
+            ordinal = int(nfo.find("seasonnumber").text)
+        elif scope == "episode":
+            ordinal = int(nfo.find("episode").text)
         else:
             ordinal = None
         return name, ordinal
@@ -33,13 +44,11 @@ async def get_title_from_nfo(base_path: str, scope: Literal["season", "tvshow", 
         raise e
 
 
-
 def get_media_file_extension(path: str):
     extension = path.split(".")[-1]
     if extension not in MEDIA_FILE_EXTENSIONS:
         return False
     return extension
-
 
 
 async def run_ffmpeg_async(
@@ -66,6 +75,7 @@ async def run_ffmpeg_async(
         )
     return out, error
 
+
 async def run_ffmpeg_generator(ffmpeg_stream) -> AsyncGenerator[bytes, None]:
     """
     Runs ffmpeg expresions from `ffmpeg-python` with asyncio
@@ -87,7 +97,9 @@ async def run_ffmpeg_generator(ffmpeg_stream) -> AsyncGenerator[bytes, None]:
         yield data
     await proc.wait()
 
+
 T = TypeVar("T")
+
 
 def batch(items: List[T], size: int = 3) -> Generator[List[T], Never, None]:
     next_batch = []
@@ -98,6 +110,7 @@ def batch(items: List[T], size: int = 3) -> Generator[List[T], Never, None]:
             next_batch = []
     if len(next_batch):
         yield next_batch
+
 
 FORMATS = {
     "webm": {
