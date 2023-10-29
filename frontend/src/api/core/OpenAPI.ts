@@ -20,7 +20,7 @@ export type OpenAPIConfig = {
 };
 
 export const OpenAPI: OpenAPIConfig = {
-    BASE: process.env.API_URL ?? 'http://10.217.1.64:8000',
+    BASE: process.env.API_URL ?? 'http://ryzenrig.koperwas.local:8000',
     VERSION: '0.1.0',
     WITH_CREDENTIALS: false,
     CREDENTIALS: 'include',

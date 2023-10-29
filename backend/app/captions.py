@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException, Response
 from tempfile import NamedTemporaryFile
-from fastapi.responses import StreamingResponse
 import ffmpeg
 
 from app.json_database import get_series
+from .cache import cache_streaming, cache
 
 
 from .utils import (
@@ -19,6 +19,7 @@ router = APIRouter(prefix="/api/clips", tags=["clips"])
 @router.get(
     "/{series_name}/{season}/{episode_ordinal}/{caption_ordinal}/simple"
 )
+@cache_streaming()
 async def get_simple_caption(
     series_name: str,
     season: int,
@@ -70,14 +71,13 @@ async def get_simple_caption(
         "webm": "video/webm",
         "gif": "image/gif",
     }
-    return StreamingResponse(
-        content_generator(), headers={"Content-Type": mime[format]}
-    )
+    return {"Content-Type": mime[format]}, content_generator()
 
 
 @router.get(
     "/{series_name}/{season}/{episode_ordinal}/{caption_ordinal_start}/{caption_ordinal_end}/multi"
 )
+@cache_streaming()
 async def get_multi_caption(
     series_name: str,
     season: int,
@@ -122,17 +122,13 @@ async def get_multi_caption(
             yield data
         temp.close()
 
-    return StreamingResponse(
-        content_generator(), headers={"Content-Type": "video/webm"}
-    )
+    return {"Content-Type": "video/webm"}, content_generator()
 
-@router.get(
-    "/{series_name}/{season_ordinal}/{episode_ordinal}/thumb"
-        )
+
+@router.get("/{series_name}/{season_ordinal}/{episode_ordinal}/thumb")
+@cache()
 async def get_thumbnail_for_episode(
-    series_name: str,
-    season_ordinal: int,
-    episode_ordinal: int
+    series_name: str, season_ordinal: int, episode_ordinal: int
 ):
     series = await get_series(series_name)
     episode = series.seasons[season_ordinal - 1].episodes[episode_ordinal - 1]

@@ -18,6 +18,7 @@ async def list_series() -> Iterable[SeriesResponse]:
     data = await load_data()
     return data
 
+
 @router.get("/series/{series_name}/cover")
 async def get_series_cover(series_name: str):
     data = await get_series(series_name)

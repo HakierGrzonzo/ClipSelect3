@@ -1,6 +1,8 @@
 import logging
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
+
+from app.cache import create_cache_dir
 from .admin_paths import router as admin_router
 from .search_router import router as search_router
 from .browse_router import router as browse_router
@@ -14,6 +16,11 @@ app = FastAPI()
 @app.get("/")
 def redirect_to_docs():
     return RedirectResponse("/docs")
+
+
+@app.on_event("startup")
+def on_startup():
+    create_cache_dir()
 
 
 app.include_router(search_router)
