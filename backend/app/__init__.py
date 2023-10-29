@@ -1,6 +1,7 @@
 import logging
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.cache import create_cache_dir
 from .admin_paths import router as admin_router
@@ -27,3 +28,15 @@ app.include_router(search_router)
 app.include_router(browse_router)
 app.include_router(admin_router)
 app.include_router(captions_router)
+
+origins = [
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)

@@ -21,6 +21,7 @@ const formatTime = (time: number): string => {
 interface Props extends Caption {
   isSelected: boolean;
   onClick: () => void;
+  id: string;
 }
 
 export const CaptionText: React.FC<Props> = ({
@@ -29,10 +30,12 @@ export const CaptionText: React.FC<Props> = ({
     start,
     isSelected,
     onClick,
+    id,
 }) => {
     const backgroundColor = colors.colors.color3
     return (
         <Box
+            id={id}
             sx={{
                 display: "flex",
                 flexDirection: "row",

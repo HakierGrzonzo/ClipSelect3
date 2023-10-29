@@ -28,13 +28,15 @@ export const ClipListHeader: React.FC<Props> = ({
         <>
             <a
                 target="_blank"
-                href={`${FRONTEND_URL}/api/clips/${seriesName}/${seasonNumber}/${episodeNumber}/${selectedCaptions}/simple`} rel="noreferrer"
+                href={`${FRONTEND_URL}/api/clips/${seriesName}/${seasonNumber}/${episodeNumber}/${selectedCaptions}/simple`}
+                rel="noreferrer"
             >
                 <Button variant="outlined">Download as webm</Button>
             </a>
             <a
                 target="_blank"
-                href={`${FRONTEND_URL}/api/clips/${seriesName}/${seasonNumber}/${episodeNumber}/${selectedCaptions}/simple?format=gif`} rel="noreferrer"
+                href={`${FRONTEND_URL}/api/clips/${seriesName}/${seasonNumber}/${episodeNumber}/${selectedCaptions}/simple?format=gif`}
+                rel="noreferrer"
             >
                 <Button variant="outlined">Download as GIF</Button>
             </a>
@@ -42,7 +44,8 @@ export const ClipListHeader: React.FC<Props> = ({
     ) : (
         <a
             target="_blank"
-            href={`${FRONTEND_URL}/api/clips/${seriesName}/${seasonNumber}/${episodeNumber}/${selectedCaptions[0]}/${selectedCaptions[1]}/multi`} rel="noreferrer"
+            href={`${FRONTEND_URL}/api/clips/${seriesName}/${seasonNumber}/${episodeNumber}/${selectedCaptions[0]}/${selectedCaptions[1]}/multi`}
+            rel="noreferrer"
         >
             <Button variant="outlined">Download as webm</Button>
         </a>

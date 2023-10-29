@@ -1,11 +1,12 @@
 "use client"
 
-import React, { useReducer } from "react"
+import React, { useEffect, useReducer } from "react"
 import { Caption } from "../api/models/Caption"
 import { Box } from "@mui/material"
 import { CaptionText } from "./CaptionText"
 import { ClipListHeader } from "./ClipListHeader"
 import { TRange } from "../types"
+import { useSearchParams } from "next/navigation"
 
 const reducer = (
     state: TRange,
@@ -50,10 +51,25 @@ interface Props {
 }
 
 export const CaptionList: React.FC<Props> = ({ captions, ...rest }) => {
+    const searchParams = useSearchParams()
+    const selectedCaption = searchParams.get("caption") || undefined
+    const initialCaption = selectedCaption
+        ? parseInt(selectedCaption)
+        : undefined
+
+    useEffect(() => {
+        if (initialCaption === undefined) {
+            return
+        }
+        const element = document.getElementById(`caption-${initialCaption}`)
+        element?.scrollIntoView({behavior: "smooth", block: "center"})
+    }, [initialCaption])
+
     const [selectedCaptions, setSelectedCaptions] = useReducer(
         reducer,
-        undefined,
+        initialCaption,
     )
+
     return (
         <Box>
             <ClipListHeader
@@ -64,6 +80,7 @@ export const CaptionList: React.FC<Props> = ({ captions, ...rest }) => {
             {captions.map((caption, index) => (
                 <CaptionText
                     {...caption}
+                    id={`caption-${index}`}
                     isSelected={checkIfInRange(selectedCaptions, index)}
                     key={index}
                     onClick={() => setSelectedCaptions(index)}
