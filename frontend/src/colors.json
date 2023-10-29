@@ -1,28 +1,28 @@
 {
-    "wallpaper": "/home/hakiergrzonzo/Pictures/wallpaper.png",
-    "alpha": "100",
+  "wallpaper": "/home/hakiergrzonzo/Pictures/wallpaper.png",
+  "alpha": "100",
 
-    "special": {
-        "background": "#0f0c16",
-        "foreground": "#afc4bc",
-        "cursor": "#afc4bc"
-    },
-    "colors": {
-        "color0": "#0f0c16",
-        "color1": "#d02450",
-        "color2": "#501ca2",
-        "color3": "#5f23c7",
-        "color4": "#6e3edd",
-        "color5": "#d725c8",
-        "color6": "#8d4cdf",
-        "color7": "#afc4bc",
-        "color8": "#7a8983",
-        "color9": "#d02450",
-        "color10": "#501ca2",
-        "color11": "#5f23c7",
-        "color12": "#6e3edd",
-        "color13": "#d725c8",
-        "color14": "#8d4cdf",
-        "color15": "#afc4bc"
-    }
+  "special": {
+    "background": "#0f0c16",
+    "foreground": "#afc4bc",
+    "cursor": "#afc4bc"
+  },
+  "colors": {
+    "color0": "#0f0c16",
+    "color1": "#d02450",
+    "color2": "#501ca2",
+    "color3": "#5f23c7",
+    "color4": "#6e3edd",
+    "color5": "#d725c8",
+    "color6": "#8d4cdf",
+    "color7": "#afc4bc",
+    "color8": "#7a8983",
+    "color9": "#d02450",
+    "color10": "#501ca2",
+    "color11": "#5f23c7",
+    "color12": "#6e3edd",
+    "color13": "#d725c8",
+    "color14": "#8d4cdf",
+    "color15": "#afc4bc"
+  }
 }

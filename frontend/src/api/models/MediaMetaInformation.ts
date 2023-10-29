@@ -4,7 +4,6 @@
 /* eslint-disable */
 
 export type MediaMetaInformation = {
-    audio_track_index?: number;
-    subtitle_track_index?: number;
+  audio_track_index?: number;
+  subtitle_track_index?: number;
 };
-

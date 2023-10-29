@@ -3,11 +3,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { SparseEpisode } from './SparseEpisode';
+import type { SparseEpisode } from "./SparseEpisode";
 
 export type SeasonResponse = {
-    name: string;
-    episodes: Array<SparseEpisode>;
-    ordinal: number;
+  name: string;
+  episodes: Array<SparseEpisode>;
+  ordinal: number;
 };
-

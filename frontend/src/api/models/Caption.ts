@@ -4,8 +4,7 @@
 /* eslint-disable */
 
 export type Caption = {
-    text: string;
-    start: number;
-    stop: number;
+  text: string;
+  start: number;
+  stop: number;
 };
-

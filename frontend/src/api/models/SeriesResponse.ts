@@ -4,6 +4,5 @@
 /* eslint-disable */
 
 export type SeriesResponse = {
-    name: string;
+  name: string;
 };
-

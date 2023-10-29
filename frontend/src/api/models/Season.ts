@@ -3,11 +3,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { Media } from './Media';
+import type { Media } from "./Media";
 
 export type Season = {
-    name: string;
-    episodes: Array<Media>;
-    ordinal: number;
+  name: string;
+  episodes: Array<Media>;
+  ordinal: number;
 };
-

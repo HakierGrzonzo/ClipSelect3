@@ -3,14 +3,13 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { Caption } from './Caption';
-import type { MediaMetaInformation } from './MediaMetaInformation';
+import type { Caption } from "./Caption";
+import type { MediaMetaInformation } from "./MediaMetaInformation";
 
 export type Media = {
-    file_path: string;
-    captions: Array<Caption>;
-    name: string;
-    ordinal: number;
-    meta: MediaMetaInformation;
+  file_path: string;
+  captions: Array<Caption>;
+  name: string;
+  ordinal: number;
+  meta: MediaMetaInformation;
 };
-

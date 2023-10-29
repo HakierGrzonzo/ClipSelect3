@@ -4,12 +4,11 @@
 /* eslint-disable */
 
 export type SearchResult = {
-    episode: number;
-    season: number;
-    series_name: string;
-    caption: number;
-    start: number;
-    stop: number;
-    text: string;
+  episode: number;
+  season: number;
+  series_name: string;
+  caption: number;
+  start: number;
+  stop: number;
+  text: string;
 };
-

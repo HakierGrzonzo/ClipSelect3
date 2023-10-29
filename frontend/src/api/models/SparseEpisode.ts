@@ -4,7 +4,6 @@
 /* eslint-disable */
 
 export type SparseEpisode = {
-    name: string;
-    ordinal: number;
+  name: string;
+  ordinal: number;
 };
-

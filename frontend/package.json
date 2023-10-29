@@ -27,6 +27,7 @@
     "@typescript-eslint/parser": "^6.9.0",
     "eslint": "latest",
     "eslint-config-next": "latest",
+    "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-react": "^7.33.2",
     "typescript": "latest"
   }
