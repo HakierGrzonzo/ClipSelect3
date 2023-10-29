@@ -6,7 +6,7 @@ import { SeriesCard } from "@/components/SeriesCard"
 
 const client = new ClipsApi(OpenAPI)
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic"
 
 export default async function HomePage() {
     const data = await client.browse.listSeriesApiSeriesGet()
