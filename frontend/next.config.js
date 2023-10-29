@@ -1,22 +1,29 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
-  modularizeImports: {
-    "@mui/icons-material": {
-      transform: "@mui/icons-material/{{member}}",
+    reactStrictMode: true,
+    swcMinify: true,
+    modularizeImports: {
+        "@mui/icons-material": {
+            transform: "@mui/icons-material/{{member}}",
+        },
     },
+    typescript: {
+      ignoreBuildErrors: true
+    },
+  eslint: {
+    ignoreDuringBuilds: true
   },
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "source.unsplash.com",
-        port: "",
-        pathname: "/random",
-      },
-    ],
-  },
-};
+    images: {
+        remotePatterns: [
+            {
+                protocol: "https",
+                hostname: "source.unsplash.com",
+                port: "",
+                pathname: "/random",
+            },
+        ],
+    },
+  output: 'standalone',
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

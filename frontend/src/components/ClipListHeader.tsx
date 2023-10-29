@@ -1,7 +1,7 @@
-import { FRONTEND_URL } from "@/constants";
-import { TRange } from "@/types";
-import { Box, Button, useTheme } from "@mui/material";
-import React from "react";
+import { FRONTEND_URL } from "@/constants"
+import { TRange } from "@/types"
+import { Box, Button, useTheme } from "@mui/material"
+import React from "react"
 
 interface Props {
   selectedCaptions: TRange;
@@ -12,58 +12,58 @@ interface Props {
 }
 
 export const ClipListHeader: React.FC<Props> = ({
-  selectedCaptions,
-  clearSelection,
-  seriesName,
-  seasonNumber,
-  episodeNumber,
+    selectedCaptions,
+    clearSelection,
+    seriesName,
+    seasonNumber,
+    episodeNumber,
 }) => {
-  const theme = useTheme();
-  const isSomethingSelected = selectedCaptions !== undefined;
+    const theme = useTheme()
+    const isSomethingSelected = selectedCaptions !== undefined
 
-  if (!isSomethingSelected) return null;
+    if (!isSomethingSelected) return null
 
-  const downloadButtons =
+    const downloadButtons =
     typeof selectedCaptions === "number" ? (
-      <>
-        <a
-          target="_blank"
-          href={`${FRONTEND_URL}/api/clips/${seriesName}/${seasonNumber}/${episodeNumber}/${selectedCaptions}/simple`}
-        >
-          <Button variant="outlined">Download as webm</Button>
-        </a>
-        <a
-          target="_blank"
-          href={`${FRONTEND_URL}/api/clips/${seriesName}/${seasonNumber}/${episodeNumber}/${selectedCaptions}/simple?format=gif`}
-        >
-          <Button variant="outlined">Download as GIF</Button>
-        </a>
-      </>
+        <>
+            <a
+                target="_blank"
+                href={`${FRONTEND_URL}/api/clips/${seriesName}/${seasonNumber}/${episodeNumber}/${selectedCaptions}/simple`} rel="noreferrer"
+            >
+                <Button variant="outlined">Download as webm</Button>
+            </a>
+            <a
+                target="_blank"
+                href={`${FRONTEND_URL}/api/clips/${seriesName}/${seasonNumber}/${episodeNumber}/${selectedCaptions}/simple?format=gif`} rel="noreferrer"
+            >
+                <Button variant="outlined">Download as GIF</Button>
+            </a>
+        </>
     ) : (
-      <a
-        target="_blank"
-        href={`${FRONTEND_URL}/api/clips/${seriesName}/${seasonNumber}/${episodeNumber}/${selectedCaptions[0]}/${selectedCaptions[1]}/multi`}
-      >
-        <Button variant="outlined">Download as webm</Button>
-      </a>
-    );
+        <a
+            target="_blank"
+            href={`${FRONTEND_URL}/api/clips/${seriesName}/${seasonNumber}/${episodeNumber}/${selectedCaptions[0]}/${selectedCaptions[1]}/multi`} rel="noreferrer"
+        >
+            <Button variant="outlined">Download as webm</Button>
+        </a>
+    )
 
-  return (
-    <Box
-      sx={{
-        position: "sticky",
-        top: 64,
-        background: theme.palette.background.default,
-      }}
-    >
-      <Box
-        sx={{ paddingBlock: 1, display: "flex", flexDirection: "row", gap: 2 }}
-      >
-        <Button onClick={clearSelection} variant="outlined">
+    return (
+        <Box
+            sx={{
+                position: "sticky",
+                top: 64,
+                background: theme.palette.background.default,
+            }}
+        >
+            <Box
+                sx={{ paddingBlock: 1, display: "flex", flexDirection: "row", gap: 2 }}
+            >
+                <Button onClick={clearSelection} variant="outlined">
           Clear Selection
-        </Button>
-        {downloadButtons}
-      </Box>
-    </Box>
-  );
-};
+                </Button>
+                {downloadButtons}
+            </Box>
+        </Box>
+    )
+}

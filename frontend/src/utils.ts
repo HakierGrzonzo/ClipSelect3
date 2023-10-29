@@ -1,3 +1,3 @@
-import { OpenAPI } from "./api";
+import { OpenAPI } from "./api"
 
-export const getApiImageUrl = (suffix: string) => `${OpenAPI.BASE}${suffix}`;
+export const getApiImageUrl = (suffix: string) => `${OpenAPI.BASE}${suffix}`
