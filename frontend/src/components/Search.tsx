@@ -1,5 +1,5 @@
 "use client"
-import { SearchResult } from "@/api"
+import { SearchResult, SeasonResponse } from "@/api"
 import { FRONTEND_URL } from "@/constants"
 import { Box, CircularProgress, TextField, Typography } from "@mui/material"
 import React, {
@@ -13,9 +13,10 @@ import { SearchResult as Item } from "./SearchResult"
 
 interface Props extends PropsWithChildren {
   seriesName: string;
+  seasons: SeasonResponse[];
 }
 
-export const Search: React.FC<Props> = ({ children, seriesName }) => {
+export const Search: React.FC<Props> = ({ children, seriesName, seasons }) => {
     const [query, setQuery] = useState("")
     const [value] = useDebounce(query, 1000)
 
@@ -95,11 +96,13 @@ export const Search: React.FC<Props> = ({ children, seriesName }) => {
         }
         return (
             <Box
-                sx={{ display: "flex", gap: 2, flexDirection: "column", marginTop: 2 }}
+                sx={{ display: "flex", gap: 2, flexDirection: "row", marginTop: 2, flexWrap: 'wrap' }}
             >
-                {results.map((result, index) => (
-                    <Item {...result} key={index} />
-                ))}
+                {results.map((result, index) => {
+                  const episode = seasons[result.season - 1].episodes[result.episode - 1]
+                  return (
+                    <Item {...result} key={index} episode={episode}/>
+                )})}
             </Box>
         )
     }

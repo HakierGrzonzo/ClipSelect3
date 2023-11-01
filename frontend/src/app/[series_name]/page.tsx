@@ -18,7 +18,7 @@ export default async function Page({
     return (
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
             <Typography variant="h4">{seriesName}</Typography>
-            <Search seriesName={seriesName}>
+            <Search seriesName={seriesName} seasons={seasons}>
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
                     {seasons.map((season) => (
                         <Box key={season.ordinal}>

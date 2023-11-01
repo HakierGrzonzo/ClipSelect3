@@ -23,12 +23,12 @@ def generate_identifier(args: Iterable, kwargs: Dict):
     serialized = []
     for a in args:
         try:
-            serialized.append(dumps(a))
+            serialized.append(a)
         except:
             pass
     for a in kwargs.values():
         try:
-            serialized.append(dumps(a))
+            serialized.append(a)
         except:
             pass
     return ":".join(list(b64encode(s.encode()).decode() for s in serialized))
@@ -56,6 +56,7 @@ def cache(*, expire: timedelta = timedelta(days=1)):
 
         @wraps(func)
         async def inner_wrapper(*args, **kwargs):
+            print(args, kwargs)
             identifier = prefix + generate_identifier(args, kwargs)
             try:
                 async with aiofiles.open(

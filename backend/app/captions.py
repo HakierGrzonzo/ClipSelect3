@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import APIRouter, HTTPException, Response
 from tempfile import NamedTemporaryFile
 import ffmpeg
@@ -128,11 +129,17 @@ async def get_multi_caption(
 @router.get("/{series_name}/{season_ordinal}/{episode_ordinal}/thumb")
 @cache()
 async def get_thumbnail_for_episode(
-    series_name: str, season_ordinal: int, episode_ordinal: int
+    series_name: str,
+    season_ordinal: int,
+    episode_ordinal: int,
+    caption: Optional[int] = None,
 ):
     series = await get_series(series_name)
+    print(caption)
     episode = series.seasons[season_ordinal - 1].episodes[episode_ordinal - 1]
-    a_random_caption = episode.captions[len(episode.captions) // 6]
+    a_random_caption = episode.captions[
+        caption if caption is not None else len(episode.captions) // 6
+    ]
     a_random_time = (a_random_caption.start + a_random_caption.stop) / 2
     thumb, _ = await run_ffmpeg_async(
         ffmpeg.input(episode.file_path, ss=f"{a_random_time}")
